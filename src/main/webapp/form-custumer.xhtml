@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="content">
+		<p:messages id="messages">
+			<p:autoUpdate />
+		</p:messages>
+		<h:form>
+			<p:card class="card-form">
+
+				<f:facet name="title">New Custumer</f:facet>
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Name" for="name" />
+					<p:inputText id="name" value="#{custumerBean.custumer.name}"
+						required="true">
+						<f:ajax event="blur" render="messages" />
+					</p:inputText>
+
+
+					<p:outputLabel value="BirthDay" for="birthDay" />
+					<p:calendar id="birthDay" value="#{custumerBean.custumer.birthDay}" required="true"
+						pattern="dd/MM/yyyy" validatorMessage="BirthDay: informe uma data válida no formato dia/mês/ano">
+						<f:ajax event="blur" render="messages" />
+					</p:calendar>
+
+					<p:outputLabel value="E-mail" for="email" />
+					<p:inputText id="email" value="#{custumerBean.custumer.email}"
+						required="true" validatorMessage="Email: informe um email válido">
+						<f:validateLength minimun="7" />
+						<f:ajax event="blur" render="messages" />
+					</p:inputText>
+
+					<p:outputLabel value="Password" for="password" />
+					<p:password id="password" value="#{custumerBean.custumer.password}"
+						validatorMessage="Password: Deve ter 6 caracteres"
+						required="true" togglemask="true" redisplay="true">
+						<f:validateLength minimum="6"/>
+						<f:ajax event="blur" render="messages" />
+					</p:password>
+
+
+				</h:panelGrid>
+
+				<f:facet name="footer">
+					<p:commandButton icon="pi pi-check" value="Save"
+						action="#{custumerBean.save}">
+						<f:ajax execute="@form" render="form-custumers" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-times" value="Cancel"
+						styleClass="ui-button-secondary" style="margin-left: .5em" />
+				</f:facet>
+			</p:card>
+		</h:form>
+
+		<div class="card" id="card-setup-list">
+			<h:form id="form-custumers">
+				<p:dataTable id="custumers" var="custumer" value="#{custumerBean.custumers}"
+					rowKey="#{custumer.id}" selectionMode="single">
+					<f:facet name="header">
+		                Custumers List
+		            </f:facet>
+
+					<p:column headerText="Name">
+						<h:outputText value="#{custumer.name}" />
+					</p:column>
+					<p:column headerText="Birthday">
+						<h:outputText value="#{custumer.birthDay}" />
+					</p:column>
+					<p:column headerText="E-mail">
+						<h:outputText value="#{custumer.email}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:contextMenu for="custumers">
+					<p:menuitem value="Delete" update="custumers" icon="pi pi-times"
+						action="#{custumerBean.executar}" />
+				</p:contextMenu>
+			</h:form>
+		</div>
+
+
+	</ui:define>
+
+</ui:composition>
+
+</html>
